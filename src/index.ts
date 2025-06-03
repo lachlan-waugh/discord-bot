@@ -6,8 +6,8 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.DirectMessages,
     GatewayIntentBits.MessageContent,
   ]
 });
@@ -17,7 +17,7 @@ client.once(Events.ClientReady, (c) => {
   console.log(`Ready! Logged in as ${c.user.tag}`);
 });
 
-client.on(Events.InteractionCreate, interaction => {
+client.on(Events.MessageCreate, async interaction => {
 	console.log('hello');
 });
 
