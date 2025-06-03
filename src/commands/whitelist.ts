@@ -1,7 +1,8 @@
+import { MessageFlags } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
 const whitelist = async (interaction) => {
-  const username = interaction.options.getUser('target');
+  const username = interaction.options.get('target').value;
   if (!/^[a-zA-Z0-9_]+$/.test(username)) {
     await interaction.reply({
       content: 'Ay dont do that',
@@ -11,7 +12,7 @@ const whitelist = async (interaction) => {
   }
 
   // please dont hack me
-  sendCommand(`whitelist ${username}`)
+  //sendCommand(`whitelist ${username}`)
   await interaction.reply({
     content: 'You have been whitelisted',
     flags: MessageFlags.Ephemeral
@@ -28,6 +29,5 @@ export default {
 	      .setDescription('The user to add to the whitelist')
 	      .setRequired(true)
 	  ),
-  execute: () => console.log('hello')
-    // await interaction.reply('Pong!')
+  execute: async (interaction) => await whitelist(interaction)
 }
