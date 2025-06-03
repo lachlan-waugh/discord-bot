@@ -5,7 +5,7 @@ const sendCommand = async (command: str): Promise<void> => {
     const rcon = await Rcon.connect({
       host: 'localhost',
       port: 25575,
-      password: process.env.RCON_PASSWORD ?? 'password123',
+      password: process.env.RCON_PASSWORD ?? '',
     });
     console.log(await rcon.send(command));
     rcon.end();
