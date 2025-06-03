@@ -58,7 +58,7 @@ const whitelist = async (interaction) => {
   await sendCommand(`whitelist add ${username}`)
   set_user(user, username);
   await interaction.reply({
-    content: 'You have been whitelisted',
+    content: `${username} has been whitelisted`,
     flags: MessageFlags.Ephemeral
   });
 }
