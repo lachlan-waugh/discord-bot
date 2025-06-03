@@ -31,13 +31,13 @@ const set_user = async (user, username) => {
 const revoke_previous_whitelists = async (username, user) => {
   const prev = get_user_list()[user.id] ?? null ;
   // Re-whitelisting the same user, w/e
-  if (!prev || prev.mc_username === username) {
-      console.log('Rewhitelisting same account lol')
+  if (!prev || prev === username) {
+      console.log(`[*] ${username} is already associated with ${user.id}`)
       return;
   }
 
-  console.log('Deleting old account')
-  await sendCommand(`whitelist remove ${prev.mc_username}`)
+  console.log(`[*] Deleting ${prev}`)
+  await sendCommand(`whitelist remove ${prev}`)
 }
 
 const whitelist = async (interaction) => {
@@ -54,6 +54,7 @@ const whitelist = async (interaction) => {
   await revoke_previous_whitelists(username, user);
 
   // please dont hack me
+  console.log(`[*] Adding ${username}`)
   await sendCommand(`whitelist add ${username}`)
   set_user(user, username);
   await interaction.reply({
