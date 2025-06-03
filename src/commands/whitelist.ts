@@ -13,7 +13,7 @@ const whitelist = async (interaction) => {
   }
 
   // please dont hack me
-  await sendCommand(`whitelist ${username}`)
+  await sendCommand(`whitelist add ${username}`)
   await interaction.reply({
     content: 'You have been whitelisted',
     flags: MessageFlags.Ephemeral
