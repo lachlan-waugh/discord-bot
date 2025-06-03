@@ -1,8 +1,47 @@
 import { MessageFlags } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import sendCommand from '../mc';
+import * as fs from 'fs';
+
+const get_user_list = () => {
+  try {
+    return JSON.parse(fs.readFileSync('users.json'));
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+const save_user_list = async (users) => {
+  try {
+    fs.writeFileSync('users.json', JSON.stringify(users));
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+const set_user = async (user, username) => {
+  const users = await get_user_list();
+  users[user.id] = username;
+  save_user_list(users);
+}
+
+// Ensure users only have a single mc account associated with them.
+const revoke_previous_whitelists = async (username, user) => {
+  const prev = get_user_list()[user.id] ?? null ;
+  // Re-whitelisting the same user, w/e
+  if (!prev || prev.mc_username === username) {
+      console.log('Rewhitelisting same account lol')
+      return;
+  }
+
+  console.log('Deleting old account')
+  await sendCommand(`whitelist remove ${prev.mc_username}`)
+}
 
 const whitelist = async (interaction) => {
+  const user = interaction.user;
   const username = interaction.options.get('target').value;
   if (!/^[a-zA-Z0-9_]{3,16}$/.test(username)) {
     await interaction.reply({
@@ -12,8 +51,11 @@ const whitelist = async (interaction) => {
     return;
   }
 
+  await revoke_previous_whitelists(username, user);
+
   // please dont hack me
   await sendCommand(`whitelist add ${username}`)
+  set_user(user, username);
   await interaction.reply({
     content: 'You have been whitelisted',
     flags: MessageFlags.Ephemeral

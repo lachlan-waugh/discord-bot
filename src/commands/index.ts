@@ -10,7 +10,7 @@ const commands = [
 ]
 
 /*
- * Push commands to Discord
+ * Push commands to Discord REST API.
  */
 const push_commands = async (commands) => {
   const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
